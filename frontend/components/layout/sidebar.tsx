@@ -12,6 +12,9 @@ import {
   TrendingUp,
   Settings,
   FileText,
+  Github,
+  Linkedin,
+  Globe,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -113,9 +116,38 @@ export function Sidebar() {
           </a>
           <ThemeToggle />
         </div>
-        <div className="text-xs text-muted-foreground px-2">
+        <div className="text-xs text-muted-foreground px-2 mb-3">
           <p>SaaS Revenue Analyzer</p>
           <p>v1.0.0</p>
+        </div>
+        <div className="flex items-center gap-3 px-2">
+          <a
+            href="https://github.com/NateDevIO/revenue-intel-saas"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            title="View on GitHub"
+          >
+            <Github className="h-4 w-4" />
+          </a>
+          <a
+            href="https://linkedin.com/in/NateDevIO"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            title="Connect on LinkedIn"
+          >
+            <Linkedin className="h-4 w-4" />
+          </a>
+          <a
+            href="https://NateDev.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            title="Visit website"
+          >
+            <Globe className="h-4 w-4" />
+          </a>
         </div>
       </div>
     </div>
