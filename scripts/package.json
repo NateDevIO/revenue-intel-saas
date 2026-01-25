@@ -1,0 +1,9 @@
+{
+  "name": "readme-screenshots",
+  "version": "1.0.0",
+  "description": "Automated screenshot capture for README",
+  "type": "module",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  }
+}
