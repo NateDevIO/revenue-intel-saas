@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m venv:*)",
+      "Bash(venvScriptsactivate)",
+      "Bash(pip install:*)",
+      "Bash(source venv/Scripts/activate)",
+      "Bash(curl:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(python:*)",
+      "Bash(npm install)",
+      "Bash(npm run dev:*)",
+      "Bash(./venv/Scripts/pip.exe install:*)",
+      "Bash(./venv/Scripts/python.exe -m uvicorn:*)",
+      "Bash(timeout /t 3)",
+      "Bash(./venv/Scripts/python.exe:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(powershell \"Stop-Process -Id 37372 -Force\")",
+      "Bash(powershell \"Stop-Process -Id 37372, 42956 -Force -ErrorAction SilentlyContinue\")",
+      "Bash(powershell \"Get-Process | Where-Object {$_Id -in @\\(37372, 42956\\)} | Stop-Process -Force\")",
+      "Bash(powershell \"Get-Process python | Stop-Process -Force\")",
+      "Bash(tasklist:*)",
+      "Bash(./venv/Scripts/python:*)",
+      "Bash(uvicorn:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(xargs:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm install:*)",
+      "Bash(npm test:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx husky init)",
+      "Bash(timeout 5 tail:*)",
+      "Bash(npx tsc:*)",
+      "Bash(timeout 3 tail:*)",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
