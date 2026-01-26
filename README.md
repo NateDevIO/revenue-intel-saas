@@ -610,6 +610,51 @@ GET  /api/churn/at-risk       # At-risk customers
 POST /api/simulator/run-scenario  # What-if simulation
 ```
 
+## 🚀 Deployment
+
+This project is designed for easy deployment to production using Railway (backend) and Vercel (frontend).
+
+### Quick Deploy
+
+**Backend (Railway):**
+1. Sign up at https://railway.app
+2. Create new project from GitHub repo
+3. Set root directory to `backend`
+4. Deploy! (automatic via `railway.toml`)
+
+**Frontend (Vercel):**
+1. Sign up at https://vercel.com
+2. Import GitHub repository
+3. Set root directory to `frontend`
+4. Add environment variable: `NEXT_PUBLIC_API_URL=https://your-backend.railway.app`
+5. Deploy!
+
+### Detailed Deployment Guide
+
+**📖 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete step-by-step instructions** including:
+- Railway backend setup with persistent storage
+- Vercel frontend configuration
+- Environment variable setup
+- Custom domain configuration
+- CORS configuration
+- Monitoring and logging
+- Troubleshooting guide
+
+### Deployment Architecture
+
+```
+┌─────────────┐         ┌──────────────┐
+│   Vercel    │────────▶│   Railway    │
+│  (Frontend) │  HTTPS  │  (Backend)   │
+│  Next.js 14 │         │  FastAPI     │
+└─────────────┘         │  + DuckDB    │
+                        └──────────────┘
+```
+
+**Estimated Cost:** $0-7/month (covered by free tiers for moderate usage)
+
+---
+
 ## Development
 
 ### Generate Fresh Data
