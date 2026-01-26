@@ -22,8 +22,8 @@ COPY backend/ .
 # Generate synthetic data (only if database doesn't exist)
 RUN python -m data.generator || true
 
-# Expose port
+# Expose port (Railway will use $PORT environment variable)
 EXPOSE 8000
 
-# Start the application
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start the application using shell form to allow $PORT variable substitution
+CMD uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}
