@@ -20,5 +20,8 @@ faker>=22.0.0
 # Validation
 pydantic>=2.5.0
 
+# AI/LLM
+anthropic>=0.18.0
+
 # Development
 python-dotenv>=1.0.0
