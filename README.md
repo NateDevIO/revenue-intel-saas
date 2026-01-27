@@ -5,13 +5,15 @@
 
   ### AI-Powered Revenue Analytics with Churn Prediction
 
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-Visit_Site-success?style=for-the-badge)](https://revenue-intel.vercel.app)
+
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
   [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
   [![Next.js 14](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
   [![FastAPI](https://img.shields.io/badge/FastAPI-0.104-green)](https://fastapi.tiangolo.com/)
 
-  **[Screenshots](#screenshots)** • **[Features](#key-features)** • **[Quick Start](#quick-start)** • **[Documentation](#documentation)** • **[API Docs](http://localhost:8000/docs)**
+  **[🌐 Live Demo](https://revenue-intel.vercel.app)** • **[Screenshots](#screenshots)** • **[Features](#key-features)** • **[Quick Start](#quick-start)** • **[Documentation](#documentation)**
 
 </div>
 
@@ -612,15 +614,20 @@ POST /api/simulator/run-scenario  # What-if simulation
 
 ## 🚀 Deployment
 
-This project is designed for easy deployment to production using Railway (backend) and Vercel (frontend).
+This project is deployed and live:
 
-### Quick Deploy
+| Service | Platform | URL |
+|---------|----------|-----|
+| **Frontend** | Vercel | [revenue-intel.vercel.app](https://revenue-intel.vercel.app) |
+| **Backend API** | Railway | [revenue-intel-saas-production.up.railway.app](https://revenue-intel-saas-production.up.railway.app/api/health) |
+
+### Deploy Your Own
 
 **Backend (Railway):**
 1. Sign up at https://railway.app
 2. Create new project from GitHub repo
-3. Set root directory to `backend`
-4. Deploy! (automatic via `railway.toml`)
+3. Railway auto-detects the `railway.toml` configuration
+4. Generate a public domain in Settings → Networking
 
 **Frontend (Vercel):**
 1. Sign up at https://vercel.com
