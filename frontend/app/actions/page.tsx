@@ -21,7 +21,6 @@ import { formatCurrency, formatPercent, getEffortColor } from "@/lib/utils";
 import type { ActionItem, Benchmarks } from "@/types";
 import {
   Target,
-  ArrowRight,
   CheckCircle,
   AlertCircle,
   TrendingUp,
