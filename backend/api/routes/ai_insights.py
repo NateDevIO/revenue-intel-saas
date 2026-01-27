@@ -32,6 +32,14 @@ async def get_customer_insights(request: AIInsightRequest):
 
     conn = get_connection()
 
+    try:
+        return await _generate_insights(conn, request, api_key)
+    finally:
+        conn.close()
+
+
+async def _generate_insights(conn, request, api_key):
+    """Generate insights using customer data and Claude API."""
     # Gather comprehensive customer data
     customer_query = """
         SELECT
@@ -110,7 +118,7 @@ Financial Metrics:
 - Contraction MRR (90d): ${mrr_trend[1] or 0:,.2f}
 
 Health & Risk:
-- Health Score: {customer_data[7]:.1f}/100 ({get_health_category(customer_data[7])})
+- Health Score: {customer_data[7]}
 - Churn Probability: {customer_data[8]:.1%}
 
 Engagement (Last 30 days):
