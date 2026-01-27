@@ -77,6 +77,26 @@ npm run dev
 ![Prioritized Actions](docs/screenshots/actions.png)
 *AI-driven recommendations with expected ARR impact and confidence intervals*
 
+### AI Insights — Executive Dashboard
+![AI Executive Insights](docs/screenshots/ai-executive.png)
+*On-demand Claude-powered executive briefing with business health narrative and priorities*
+
+### AI Insights — Revenue at Risk
+![AI Risk Insights](docs/screenshots/ai-risk.png)
+*AI-generated root-cause analysis of churn risk with intervention recommendations*
+
+### AI Insights — Funnel Analysis
+![AI Funnel Insights](docs/screenshots/ai-funnel.png)
+*Bottleneck identification and rep coaching recommendations powered by Claude*
+
+### AI Insights — What-If Simulator
+![AI Simulator Insights](docs/screenshots/ai-simulator.png)
+*Scenario recommendations and optimal parameter guidance from Claude*
+
+### AI Insights — Revenue Intelligence
+![AI Revenue Insights](docs/screenshots/ai-revenue.png)
+*Revenue trend narrative with 3-month forecast and benchmark comparison*
+
 </details>
 
 ---
@@ -158,10 +178,10 @@ This platform uses **machine learning** to predict churn 30-60 days in advance w
 <td width="50%">
 
 ### 🤖 **AI-Powered Insights**
+- Page-level AI analysis on every dashboard
 - Natural language customer queries
-- Automated intervention recommendations
-- Risk factor explanation via SHAP
-- Powered by Claude Sonnet 4.5
+- On-demand executive briefings & forecasts
+- Powered by Claude Sonnet 4
 
 ### 🎮 **What-If Simulator**
 - Monte Carlo scenario modeling
@@ -314,17 +334,23 @@ Comprehensive technical documentation covering:
 - Conversion improvement modeling
 - Expansion opportunity sizing
 
-### ✨ AI-Powered Customer Insights (NEW!)
-- **Ask Claude AI** about any customer in natural language
+### 🤖 AI-Powered Page Insights (NEW!)
+
+Every major page now includes an **on-demand AI analysis panel** powered by Claude. Click "Generate Insights" to get a tailored AI briefing, or ask custom questions about the data on that page.
+
+| Page | AI Focus | Example Questions |
+|------|----------|-------------------|
+| **Executive Dashboard** | Monday morning briefing, anomalies, priorities | "What should I focus on this week?" |
+| **Revenue at Risk** | Root-cause analysis, intervention plans, 90-day forecast | "Which customers should we intervene with first?" |
+| **Funnel Analysis** | Bottleneck identification, loss reason fixes, rep coaching | "Where is the biggest bottleneck in our funnel?" |
+| **What-If Simulator** | Scenario recommendations, result explanation | "Which scenario would have the highest ROI?" |
+| **Revenue Intelligence** | Trend narrative, MRR drivers, 3-month forecast | "Is our revenue accelerating or decelerating?" |
+
+### 🧠 AI Customer Insights
+- **Ask Claude AI** about any individual customer in natural language
 - Get instant analysis of churn risk drivers
 - Receive actionable intervention recommendations
-- Powered by Claude Sonnet 4.5 for enterprise-grade insights
-
-**Example questions:**
-- "Why is this customer at risk?"
-- "What actions should we take to retain them?"
-- "What's driving their low health score?"
-- "How can we prevent churn for this account?"
+- Powered by Claude Sonnet 4 for enterprise-grade insights
 
 ## 🛠️ Technology Stack
 
@@ -601,15 +627,21 @@ Multi-factor scoring (0-100):
 **Interactive Docs:** `http://localhost:8000/docs`
 
 ```
-GET  /api/health              # Health check
-GET  /api/summary             # Executive summary
-GET  /api/actions             # Prioritized actions
-GET  /api/revenue/summary     # Revenue metrics
-GET  /api/revenue/waterfall   # MRR waterfall
-GET  /api/funnel/summary      # Funnel overview
-GET  /api/customers           # Customer list (paginated)
-GET  /api/churn/at-risk       # At-risk customers
-POST /api/simulator/run-scenario  # What-if simulation
+GET  /api/health                    # Health check
+GET  /api/summary                   # Executive summary
+GET  /api/actions                   # Prioritized actions
+GET  /api/revenue/summary           # Revenue metrics
+GET  /api/revenue/waterfall         # MRR waterfall
+GET  /api/funnel/summary            # Funnel overview
+GET  /api/customers                 # Customer list (paginated)
+GET  /api/churn/at-risk             # At-risk customers
+POST /api/simulator/run-scenario    # What-if simulation
+POST /api/ai/customer-insights      # AI customer analysis
+POST /api/ai/executive-insights     # AI executive briefing
+POST /api/ai/risk-insights          # AI risk analysis
+POST /api/ai/funnel-insights        # AI funnel analysis
+POST /api/ai/simulator-insights     # AI scenario guidance
+POST /api/ai/revenue-insights       # AI revenue forecast
 ```
 
 ## 🚀 Deployment

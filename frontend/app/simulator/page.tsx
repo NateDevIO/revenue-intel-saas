@@ -20,6 +20,7 @@ import { EnhancedSlider } from "@/components/ui/enhanced-slider";
 import { FadeIn } from "@/components/ui/fade-in";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExportShareMenu } from "@/components/export-share-menu";
+import { PageInsights } from "@/components/ai/page-insights";
 
 export default function SimulatorPage() {
   const [presets, setPresets] = useState<ScenarioPreset[]>([]);
@@ -619,6 +620,21 @@ export default function SimulatorPage() {
       </motion.div>
     )}
   </AnimatePresence>
+
+      {/* AI Insights */}
+      <PageInsights
+        pageId="simulator"
+        pageTitle="What-If Simulator"
+        apiEndpoint="/api/ai/simulator-insights"
+        buttonLabel="Generate Scenario Recommendations"
+        suggestedQuestions={[
+          "Which scenario would have the highest ROI?",
+          "What should we focus on: churn, conversion, or expansion?",
+          "Explain the simulation results in plain English",
+          "What parameters should we start with?",
+        ]}
+        contextData={result ? { scenario_result: result } : undefined}
+      />
     </div>
   );
 }

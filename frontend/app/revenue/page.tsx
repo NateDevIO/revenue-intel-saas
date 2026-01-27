@@ -10,6 +10,7 @@ import { formatCurrency, formatPercent } from "@/lib/utils";
 import { RevenueTrendChart, MRRWaterfallChart } from "@/components/charts";
 import { DashboardSkeleton } from "@/components/ui/skeleton";
 import { ExportShareMenu } from "@/components/export-share-menu";
+import { PageInsights } from "@/components/ai/page-insights";
 
 export default function RevenuePage() {
   const [waterfall, setWaterfall] = useState<any[]>([]);
@@ -290,6 +291,20 @@ export default function RevenuePage() {
           </CardContent>
         </Card>
       )}
+
+      {/* AI Insights */}
+      <PageInsights
+        pageId="revenue"
+        pageTitle="Revenue Intelligence"
+        apiEndpoint="/api/ai/revenue-insights"
+        buttonLabel="Generate Revenue Analysis"
+        suggestedQuestions={[
+          "Is our revenue accelerating or decelerating?",
+          "What's driving our MRR movements?",
+          "Give me a 3-month revenue forecast",
+          "How does our NRR compare to benchmarks?",
+        ]}
+      />
     </div>
   );
 }

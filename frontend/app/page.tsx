@@ -34,6 +34,7 @@ import Link from "next/link";
 import { MRRWaterfallChart, HealthScorePieChart } from "@/components/charts";
 import { FadeIn, StaggerChildren, StaggerItem } from "@/components/ui/fade-in";
 import { ExportShareMenu } from "@/components/export-share-menu";
+import { PageInsights } from "@/components/ai/page-insights";
 
 type MetricDialog = "arr" | "nrr" | "risk" | "ltv" | "action" | null;
 
@@ -323,6 +324,20 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* AI Insights */}
+      <PageInsights
+        pageId="executive"
+        pageTitle="Executive Dashboard"
+        apiEndpoint="/api/ai/executive-insights"
+        buttonLabel="Generate Executive Briefing"
+        suggestedQuestions={[
+          "What should I focus on this Monday?",
+          "What are the biggest risks to ARR?",
+          "Which metrics are trending poorly?",
+          "Summarize our business health in 3 sentences",
+        ]}
+      />
 
       {/* Metric Detail Dialogs */}
       {/* ARR Dialog */}

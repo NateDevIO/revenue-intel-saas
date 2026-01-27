@@ -51,6 +51,7 @@ import {
   Users,
 } from "lucide-react";
 import { ChurnDistributionChart } from "@/components/charts";
+import { PageInsights } from "@/components/ai/page-insights";
 
 type MetricDialog = "arr" | "nrr" | "risk" | "ltv" | null;
 
@@ -530,6 +531,20 @@ export default function RiskPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* AI Insights */}
+      <PageInsights
+        pageId="risk"
+        pageTitle="Revenue at Risk"
+        apiEndpoint="/api/ai/risk-insights"
+        buttonLabel="Generate Risk Analysis"
+        suggestedQuestions={[
+          "What is the root cause of our churn risk?",
+          "Which customers should we intervene with first?",
+          "What is our 90-day churn forecast?",
+          "How can we reduce ARR at risk by 20%?",
+        ]}
+      />
 
       {/* Metric Detail Dialogs */}
       {/* ARR Dialog */}

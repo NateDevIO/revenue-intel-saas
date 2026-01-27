@@ -47,6 +47,7 @@ import type {
 } from "@/types";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
 import { FunnelChart } from "@/components/charts";
+import { PageInsights } from "@/components/ai/page-insights";
 
 export default function FunnelPage() {
   const [summary, setSummary] = useState<FunnelSummary | null>(null);
@@ -507,6 +508,20 @@ export default function FunnelPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* AI Insights */}
+      <PageInsights
+        pageId="funnel"
+        pageTitle="Funnel Analysis"
+        apiEndpoint="/api/ai/funnel-insights"
+        buttonLabel="Generate Funnel Analysis"
+        suggestedQuestions={[
+          "Where is the biggest bottleneck in our funnel?",
+          "Which loss reasons should we fix first?",
+          "Which reps need coaching and on what?",
+          "How can we improve our overall win rate?",
+        ]}
+      />
 
       {/* Sales Rep Detail Dialog */}
       <Dialog open={selectedRep !== null} onOpenChange={() => setSelectedRep(null)}>
