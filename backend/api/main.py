@@ -52,13 +52,17 @@ async def lifespan(app: FastAPI):
     log_startup_info()
     print("Starting SaaS Revenue Lifecycle Analyzer API...")
 
-    if not table_exists('customers'):
+    # Check if table exists AND has data
+    stats = get_database_stats()
+    customer_count = stats.get('customers', 0)
+
+    if not table_exists('customers') or customer_count == 0:
         print("No data found. Generating synthetic data...")
         generate_and_save()
-        print("Data generation complete!")
-    else:
         stats = get_database_stats()
-        print(f"Database loaded with {stats.get('customers', 0)} customers")
+        print(f"Data generation complete! {stats.get('customers', 0)} customers created.")
+    else:
+        print(f"Database loaded with {customer_count} customers")
 
     yield
 
