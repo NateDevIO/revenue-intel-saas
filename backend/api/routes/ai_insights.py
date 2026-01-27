@@ -63,7 +63,7 @@ async def get_customer_insights(request: AIInsightRequest):
             AVG(logins) as avg_logins,
             AVG(api_calls) as avg_api_calls,
             AVG(reports_generated) as avg_reports,
-            AVG(active_users) as avg_active_users
+            AVG(team_members_active) as avg_active_users
         FROM usage_events
         WHERE customer_id = ?
         AND event_date >= CURRENT_DATE - INTERVAL '30 days'
@@ -73,7 +73,7 @@ async def get_customer_insights(request: AIInsightRequest):
 
     # Get latest NPS score
     nps_query = """
-        SELECT score, feedback
+        SELECT score, response_text
         FROM nps_surveys
         WHERE customer_id = ?
         ORDER BY survey_date DESC
