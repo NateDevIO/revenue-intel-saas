@@ -373,7 +373,7 @@
                     <strong>Version:</strong> 1.0
                 </div>
                 <div class="metadata-item">
-                    <strong>Last Updated:</strong> January 24, 2026
+                    <strong>Last Updated:</strong> January 27, 2026
                 </div>
                 <div class="metadata-item">
                     <strong>Classification:</strong> Technical Documentation
@@ -393,6 +393,7 @@
                 <li><a href="#business-metrics">6. Business Metrics</a></li>
                 <li><a href="#data-quality">7. Data Quality & Validation</a></li>
                 <li><a href="#performance">8. Performance Optimization</a></li>
+                <li><a href="#ai-insights">9. AI-Powered Insights</a></li>
                 <li><a href="#appendix">Appendices</a></li>
             </ul>
         </nav>
@@ -1103,6 +1104,197 @@ async def fetch_all_metrics():
                 </div>
             </section>
 
+            <section id="ai-insights">
+                <h2>9. AI-Powered Insights</h2>
+
+                <p>The platform integrates Claude AI (by Anthropic) to provide on-demand, context-aware analysis across every dashboard page. Rather than pre-computed static text, insights are generated in real-time using live data from the database, giving users actionable intelligence tailored to the current state of their business.</p>
+
+                <div class="callout callout-info">
+                    <h4>Architecture Overview</h4>
+                    <ul>
+                        <li><strong>AI Provider:</strong> Anthropic Claude API (claude-sonnet-4-20250514)</li>
+                        <li><strong>Integration:</strong> Server-side Python via <code>anthropic</code> SDK</li>
+                        <li><strong>Trigger:</strong> On-demand (user clicks "Generate Insights")</li>
+                        <li><strong>Token Limit:</strong> 1,024 max tokens per response</li>
+                        <li><strong>Shared Helper:</strong> Single <code>_call_claude()</code> function for all endpoints</li>
+                    </ul>
+                </div>
+
+                <h3>9.1 API Endpoints</h3>
+                <p>All AI endpoints are registered under the <code>/api/ai</code> prefix and accept POST requests. Each endpoint queries live data from the database and constructs a specialized prompt for Claude.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Endpoint</th>
+                            <th>Page</th>
+                            <th>Data Sources</th>
+                            <th>AI Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/api/ai/customer-insights</code></td>
+                            <td>Customer Detail</td>
+                            <td>customers, usage_events, nps_surveys, mrr_movements</td>
+                            <td>Individual health &amp; risk analysis, intervention strategies</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/ai/executive-insights</code></td>
+                            <td>Executive Summary</td>
+                            <td>revenue_summary, churn_summary, funnel_summary, health_distribution, action_priority_matrix</td>
+                            <td>Monday morning briefing, anomalies, top 3 priorities</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/ai/risk-insights</code></td>
+                            <td>Revenue at Risk</td>
+                            <td>churn_summary, at_risk_customers (top 10), revenue_leakage_analysis</td>
+                            <td>Root-cause churn patterns, segment interventions, 90-day forecast</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/ai/funnel-insights</code></td>
+                            <td>Funnel Analysis</td>
+                            <td>funnel_summary, stage_conversion_rates, velocity_metrics, loss_reasons, rep_performance (top 10)</td>
+                            <td>Bottleneck identification, loss reason fixes, rep coaching</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/ai/simulator-insights</code></td>
+                            <td>What-If Simulator</td>
+                            <td>revenue_summary, scenario presets</td>
+                            <td>Highest-ROI scenarios, optimal parameters, monitoring guidance</td>
+                        </tr>
+                        <tr>
+                            <td><code>/api/ai/revenue-insights</code></td>
+                            <td>Revenue Intelligence</td>
+                            <td>revenue_summary, mrr_waterfall, nrr_trend, ltv_cac_summary</td>
+                            <td>Revenue trend narrative, MRR drivers, NRR health, 3-month forecast</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>9.2 Prompt Engineering</h3>
+                <p>Each endpoint uses a specialized system prompt that establishes a domain-expert persona. The system dynamically selects between two prompt strategies based on user input:</p>
+
+                <h4>Default Mode (No Custom Question)</h4>
+                <p>The system prompt is highly specific to the page context with structured output instructions:</p>
+                <pre>// Executive Summary example:
+System: "Provide a Monday morning briefing. Focus on:
+  1) Overall health narrative
+  2) Key anomalies
+  3) Top 3 priorities with expected impact
+  4) One metric deserving deeper investigation.
+  Use numbers."
+
+User: [Full data context from database queries]</pre>
+
+                <h4>Custom Question Mode</h4>
+                <p>When the user provides a specific question, the system prompt becomes a flexible domain expert:</p>
+                <pre>// Executive Summary example:
+System: "You are an expert SaaS business strategist.
+  Answer using provided data.
+  Be concise, data-driven, actionable."
+
+User: [Data context + user's specific question]</pre>
+
+                <h4>System Roles by Page</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Page</th>
+                            <th>AI Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Customer Detail</td>
+                            <td>Expert SaaS Customer Success analyst</td>
+                        </tr>
+                        <tr>
+                            <td>Executive Summary</td>
+                            <td>Expert SaaS business strategist</td>
+                        </tr>
+                        <tr>
+                            <td>Revenue at Risk</td>
+                            <td>Expert SaaS retention strategist</td>
+                        </tr>
+                        <tr>
+                            <td>Funnel Analysis</td>
+                            <td>Expert SaaS sales operations analyst</td>
+                        </tr>
+                        <tr>
+                            <td>What-If Simulator</td>
+                            <td>Expert SaaS revenue strategist</td>
+                        </tr>
+                        <tr>
+                            <td>Revenue Intelligence</td>
+                            <td>Expert SaaS revenue analyst</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>9.3 Backend Implementation</h3>
+                <p><strong>Location:</strong> <code>backend/api/routes/ai_insights.py</code></p>
+
+                <h4>Shared Helpers</h4>
+                <pre>_get_api_key()      # Retrieves ANTHROPIC_API_KEY from environment
+_call_claude()      # Core API wrapper: system prompt + user message → insight + model name
+_format_dict()      # JSON formatter for context data in prompts
+get_health_category()  # Maps health_score (0-100) to Green/Yellow/Red
+get_nps_category()     # Maps NPS score to Promoter/Passive/Detractor</pre>
+
+                <h4>Model Configuration</h4>
+                <pre>from anthropic import Anthropic
+
+client = Anthropic(api_key=api_key)
+response = client.messages.create(
+    model="claude-sonnet-4-20250514",
+    max_tokens=1024,
+    system=system_prompt,
+    messages=[{"role": "user", "content": user_message}]
+)</pre>
+
+                <h3>9.4 Frontend Components</h3>
+                <p><strong>Location:</strong> <code>frontend/components/ai/</code></p>
+
+                <h4>PageInsights (Reusable)</h4>
+                <p>A shared component used on 5 dashboard pages (Executive, Revenue, Risk, Funnel, Simulator):</p>
+                <ul>
+                    <li>Collapsible card UI with expand/collapse toggle</li>
+                    <li>"Generate Insights" button for default analysis</li>
+                    <li>Custom question textarea with Enter-to-send support</li>
+                    <li>Suggested questions displayed as clickable buttons</li>
+                    <li>Loading spinner during API calls</li>
+                    <li>Result display with model name attribution</li>
+                    <li>Clear and Regenerate controls</li>
+                </ul>
+
+                <pre>// Props interface
+interface PageInsightsProps {
+  pageId: string;           // e.g. "executive", "revenue"
+  pageTitle: string;        // Display name
+  apiEndpoint: string;      // e.g. "/api/ai/executive-insights"
+  buttonLabel?: string;     // e.g. "Generate Executive Briefing"
+  suggestedQuestions: string[];
+  contextData?: Record&lt;string, any&gt;;
+}</pre>
+
+                <h4>CustomerInsights (Dedicated)</h4>
+                <p>A dedicated component for individual customer analysis on the Customer Detail page:</p>
+                <ul>
+                    <li>Accepts <code>customerId</code> and <code>customerName</code> props</li>
+                    <li>Hardcoded suggested questions (e.g., "Why is this customer at risk?")</li>
+                    <li>Calls <code>/api/ai/customer-insights</code> endpoint</li>
+                </ul>
+
+                <h3>9.5 Configuration</h3>
+                <div class="callout callout-warning">
+                    <h4>Required Environment Variable</h4>
+                    <p>The AI insights feature requires an <code>ANTHROPIC_API_KEY</code> environment variable. Without it, all <code>/api/ai/*</code> endpoints return HTTP 500. Set it in the backend <code>.env</code> file:</p>
+                    <pre>ANTHROPIC_API_KEY=your_api_key_here</pre>
+                    <p><strong>Dependency:</strong> <code>anthropic>=0.18.0</code> (Python SDK)</p>
+                </div>
+            </section>
+
             <section id="appendix">
                 <h2>Appendix A: Glossary</h2>
 
@@ -1181,6 +1373,7 @@ async def fetch_all_metrics():
                     <li>scikit-learn 1.4+ (machine learning)</li>
                     <li>XGBoost 2.0+ (gradient boosting)</li>
                     <li>SHAP 0.44+ (model interpretability)</li>
+                    <li>Anthropic SDK 0.18+ (Claude AI integration)</li>
                 </ul>
 
                 <h3>Frontend</h3>
@@ -1194,7 +1387,7 @@ async def fetch_all_metrics():
 
                 <div style="text-align: center; color: var(--text-secondary); padding: 2rem 0;">
                     <p><strong>Author:</strong> SaaS Revenue Lifecycle Analyzer Development Team</p>
-                    <p><strong>Version:</strong> 1.0 | <strong>Date:</strong> January 24, 2026</p>
+                    <p><strong>Version:</strong> 1.0 | <strong>Date:</strong> January 27, 2026</p>
                     <p><strong>Status:</strong> Production | <strong>Next Review:</strong> April 2026</p>
                     <p style="margin-top: 2rem;">For questions or updates to this methodology, please contact the development team.</p>
                 </div>

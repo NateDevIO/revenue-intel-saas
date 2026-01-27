@@ -2,7 +2,7 @@
 ## SaaS Revenue Lifecycle Analyzer
 
 **Version:** 1.0
-**Last Updated:** January 24, 2026
+**Last Updated:** January 27, 2026
 **Classification:** Technical Documentation
 
 ---
@@ -31,6 +31,7 @@ The SaaS Revenue Lifecycle Analyzer is a comprehensive revenue intelligence plat
 6. [Business Metrics Calculations](#business-metrics-calculations)
 7. [Data Quality & Validation](#data-quality--validation)
 8. [Performance Optimization](#performance-optimization)
+9. [AI-Powered Insights](#ai-powered-insights)
 
 ---
 
@@ -1086,6 +1087,150 @@ async def fetch_all_metrics():
 
 ---
 
+## 9. AI-Powered Insights
+
+The platform integrates Claude AI (by Anthropic) to provide on-demand, context-aware analysis across every dashboard page. Rather than pre-computed static text, insights are generated in real-time using live data from the database, giving users actionable intelligence tailored to the current state of their business.
+
+### Architecture Overview
+
+- **AI Provider:** Anthropic Claude API (`claude-sonnet-4-20250514`)
+- **Integration:** Server-side Python via `anthropic` SDK
+- **Trigger:** On-demand (user clicks "Generate Insights")
+- **Token Limit:** 1,024 max tokens per response
+- **Shared Helper:** Single `_call_claude()` function for all endpoints
+
+### 9.1 API Endpoints
+
+All AI endpoints are registered under the `/api/ai` prefix and accept POST requests. Each endpoint queries live data from the database and constructs a specialized prompt for Claude.
+
+| Endpoint | Page | Data Sources | AI Focus |
+|----------|------|-------------|----------|
+| `/api/ai/customer-insights` | Customer Detail | customers, usage_events, nps_surveys, mrr_movements | Individual health & risk analysis, intervention strategies |
+| `/api/ai/executive-insights` | Executive Summary | revenue_summary, churn_summary, funnel_summary, health_distribution, action_priority_matrix | Monday morning briefing, anomalies, top 3 priorities |
+| `/api/ai/risk-insights` | Revenue at Risk | churn_summary, at_risk_customers (top 10), revenue_leakage_analysis | Root-cause churn patterns, segment interventions, 90-day forecast |
+| `/api/ai/funnel-insights` | Funnel Analysis | funnel_summary, stage_conversion_rates, velocity_metrics, loss_reasons, rep_performance (top 10) | Bottleneck identification, loss reason fixes, rep coaching |
+| `/api/ai/simulator-insights` | What-If Simulator | revenue_summary, scenario presets | Highest-ROI scenarios, optimal parameters, monitoring guidance |
+| `/api/ai/revenue-insights` | Revenue Intelligence | revenue_summary, mrr_waterfall, nrr_trend, ltv_cac_summary | Revenue trend narrative, MRR drivers, NRR health, 3-month forecast |
+
+### 9.2 Prompt Engineering
+
+Each endpoint uses a specialized system prompt that establishes a domain-expert persona. The system dynamically selects between two prompt strategies based on user input:
+
+**Default Mode (No Custom Question):**
+
+The system prompt is highly specific to the page context with structured output instructions:
+
+```
+// Executive Summary example:
+System: "Provide a Monday morning briefing. Focus on:
+  1) Overall health narrative
+  2) Key anomalies
+  3) Top 3 priorities with expected impact
+  4) One metric deserving deeper investigation.
+  Use numbers."
+
+User: [Full data context from database queries]
+```
+
+**Custom Question Mode:**
+
+When the user provides a specific question, the system prompt becomes a flexible domain expert:
+
+```
+// Executive Summary example:
+System: "You are an expert SaaS business strategist.
+  Answer using provided data.
+  Be concise, data-driven, actionable."
+
+User: [Data context + user's specific question]
+```
+
+**System Roles by Page:**
+
+| Page | AI Role |
+|------|---------|
+| Customer Detail | Expert SaaS Customer Success analyst |
+| Executive Summary | Expert SaaS business strategist |
+| Revenue at Risk | Expert SaaS retention strategist |
+| Funnel Analysis | Expert SaaS sales operations analyst |
+| What-If Simulator | Expert SaaS revenue strategist |
+| Revenue Intelligence | Expert SaaS revenue analyst |
+
+### 9.3 Backend Implementation
+
+**Location:** `backend/api/routes/ai_insights.py`
+
+**Shared Helpers:**
+
+```python
+_get_api_key()         # Retrieves ANTHROPIC_API_KEY from environment
+_call_claude()         # Core API wrapper: system prompt + user message → insight + model name
+_format_dict()         # JSON formatter for context data in prompts
+get_health_category()  # Maps health_score (0-100) to Green/Yellow/Red
+get_nps_category()     # Maps NPS score to Promoter/Passive/Detractor
+```
+
+**Model Configuration:**
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic(api_key=api_key)
+response = client.messages.create(
+    model="claude-sonnet-4-20250514",
+    max_tokens=1024,
+    system=system_prompt,
+    messages=[{"role": "user", "content": user_message}]
+)
+```
+
+### 9.4 Frontend Components
+
+**Location:** `frontend/components/ai/`
+
+#### PageInsights (Reusable)
+
+A shared component used on 5 dashboard pages (Executive, Revenue, Risk, Funnel, Simulator):
+
+- Collapsible card UI with expand/collapse toggle
+- "Generate Insights" button for default analysis
+- Custom question textarea with Enter-to-send support
+- Suggested questions displayed as clickable buttons
+- Loading spinner during API calls
+- Result display with model name attribution
+- Clear and Regenerate controls
+
+```typescript
+interface PageInsightsProps {
+  pageId: string;           // e.g. "executive", "revenue"
+  pageTitle: string;        // Display name
+  apiEndpoint: string;      // e.g. "/api/ai/executive-insights"
+  buttonLabel?: string;     // e.g. "Generate Executive Briefing"
+  suggestedQuestions: string[];
+  contextData?: Record<string, any>;
+}
+```
+
+#### CustomerInsights (Dedicated)
+
+A dedicated component for individual customer analysis on the Customer Detail page:
+
+- Accepts `customerId` and `customerName` props
+- Hardcoded suggested questions (e.g., "Why is this customer at risk?")
+- Calls `/api/ai/customer-insights` endpoint
+
+### 9.5 Configuration
+
+> **Required:** The AI insights feature requires an `ANTHROPIC_API_KEY` environment variable. Without it, all `/api/ai/*` endpoints return HTTP 500. Set it in the backend `.env` file:
+>
+> ```
+> ANTHROPIC_API_KEY=your_api_key_here
+> ```
+>
+> **Dependency:** `anthropic>=0.18.0` (Python SDK)
+
+---
+
 ## Appendix A: Glossary
 
 **ARR (Annual Recurring Revenue):** Normalized annual value of recurring subscriptions
@@ -1143,6 +1288,7 @@ async def fetch_all_metrics():
 - scikit-learn 1.4+ (machine learning)
 - XGBoost 2.0+ (gradient boosting)
 - SHAP 0.44+ (model interpretability)
+- Anthropic SDK 0.18+ (Claude AI integration)
 
 **Frontend:**
 - Next.js 14 (React framework)
@@ -1160,7 +1306,7 @@ async def fetch_all_metrics():
 
 **Author:** SaaS Revenue Lifecycle Analyzer Development Team
 **Version:** 1.0
-**Date:** January 24, 2026
+**Date:** January 27, 2026
 **Status:** Production
 **Classification:** Technical Documentation
 **Next Review:** April 2026

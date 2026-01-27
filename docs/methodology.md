@@ -10,6 +10,7 @@ This document describes the analytical methodologies used in the SaaS Revenue Li
 4. [Health Scoring](#health-scoring)
 5. [Revenue Intelligence](#revenue-intelligence)
 6. [What-If Simulation](#what-if-simulation)
+7. [AI-Powered Insights](#ai-powered-insights)
 
 ---
 
@@ -240,6 +241,49 @@ for iteration in range(1000):
 
 ---
 
+## AI-Powered Insights
+
+### Overview
+
+The platform integrates Claude AI (by Anthropic) to provide on-demand, context-aware analysis on every dashboard page. Insights are generated in real-time from live database queries, not pre-computed text.
+
+### Architecture
+
+| Component | Detail |
+|-----------|--------|
+| AI Provider | Anthropic Claude API |
+| Model | `claude-sonnet-4-20250514` |
+| Max Tokens | 1,024 per response |
+| Integration | Server-side Python (`anthropic` SDK) |
+| Trigger | On-demand (user clicks "Generate Insights") |
+| Backend | `backend/api/routes/ai_insights.py` |
+| Frontend | `frontend/components/ai/page-insights.tsx` (reusable) |
+
+### Endpoints
+
+All endpoints are POST under `/api/ai`:
+
+| Endpoint | Page | AI Focus |
+|----------|------|----------|
+| `/api/ai/customer-insights` | Customer Detail | Health & risk analysis, intervention strategies |
+| `/api/ai/executive-insights` | Executive Summary | Monday briefing, anomalies, top priorities |
+| `/api/ai/risk-insights` | Revenue at Risk | Churn patterns, segment interventions, 90-day forecast |
+| `/api/ai/funnel-insights` | Funnel Analysis | Bottleneck identification, loss fixes, rep coaching |
+| `/api/ai/simulator-insights` | What-If Simulator | Highest-ROI scenarios, optimal parameters |
+| `/api/ai/revenue-insights` | Revenue Intelligence | Trend narrative, MRR drivers, NRR health |
+
+### Prompt Strategy
+
+- **Default mode**: Page-specific system prompt with structured output instructions (e.g., "Provide a Monday morning briefing...")
+- **Custom question mode**: Generic domain-expert prompt + user's specific question
+- Each page has a specialized AI role (e.g., "Expert SaaS retention strategist" for Risk)
+
+### Configuration
+
+Requires `ANTHROPIC_API_KEY` environment variable set in backend `.env`. Without it, all AI endpoints return HTTP 500.
+
+---
+
 ## Industry Benchmarks
 
 Source: Publicly available SaaS benchmarks (KeyBanc, OpenView, etc.)
@@ -278,4 +322,4 @@ Used to verify probability calibration quality.
 
 ---
 
-*Last updated: January 2025*
+*Last updated: January 2026*
