@@ -7,6 +7,7 @@ python-multipart>=0.0.6
 pandas>=2.1.0
 numpy>=1.26.0
 duckdb>=0.9.0
+pyarrow>=14.0.0
 
 # ML and statistics
 scikit-learn>=1.4.0
