@@ -58,8 +58,8 @@ export function RevenueTrendChart({ data }: RevenueTrendProps) {
   };
 
   return (
-    <div className="w-full h-[400px]">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="w-full">
+      <ResponsiveContainer width="100%" height={400}>
         <AreaChart
           data={data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
