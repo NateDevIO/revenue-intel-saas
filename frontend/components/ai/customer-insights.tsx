@@ -27,7 +27,7 @@ export function CustomerInsights({ customerId, customerName }: CustomerInsightsP
   const handleGetInsights = async (customQuestion?: string) => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/api/ai/customer-insights", {
+      const response = await fetch("/api/ai/customer-insights", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
