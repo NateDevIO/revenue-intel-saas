@@ -25,7 +25,6 @@ import {
   AlertCircle,
   TrendingUp,
   DollarSign,
-  CheckCircle2,
 } from "lucide-react";
 
 type BenchmarkType = "nrr" | "ltv_cac_ratio" | "payback_months" | "monthly_churn_rate" | null;
