@@ -181,7 +181,7 @@ This platform uses **machine learning** to predict churn 30-60 days in advance w
 - Page-level AI analysis on every dashboard
 - Natural language customer queries
 - On-demand executive briefings & forecasts
-- Powered by Claude Sonnet 4
+- Powered by Claude Sonnet
 
 ### 🎮 **What-If Simulator**
 - Monte Carlo scenario modeling
@@ -350,7 +350,7 @@ Every major page now includes an **on-demand AI analysis panel** powered by Clau
 - **Ask Claude AI** about any individual customer in natural language
 - Get instant analysis of churn risk drivers
 - Receive actionable intervention recommendations
-- Powered by Claude Sonnet 4 for enterprise-grade insights
+- Powered by Claude Sonnet for enterprise-grade insights
 
 ## 🛠️ Technology Stack
 
@@ -371,7 +371,7 @@ Every major page now includes an **on-demand AI analysis panel** powered by Clau
 ![Recharts](https://img.shields.io/badge/Recharts-Viz-8884D8?style=flat-square)
 
 ### AI & Analytics
-![Claude](https://img.shields.io/badge/Claude-Sonnet_4.5-8B5CF6?style=flat-square)
+![Claude](https://img.shields.io/badge/Claude-Sonnet-8B5CF6?style=flat-square)
 ![SHAP](https://img.shields.io/badge/SHAP-Interpretability-FF6B6B?style=flat-square)
 
 </div>

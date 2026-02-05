@@ -1093,7 +1093,7 @@ The platform integrates Claude AI (by Anthropic) to provide on-demand, context-a
 
 ### Architecture Overview
 
-- **AI Provider:** Anthropic Claude API (`claude-sonnet-4-20250514`)
+- **AI Provider:** Anthropic Claude API (Sonnet)
 - **Integration:** Server-side Python via `anthropic` SDK
 - **Trigger:** On-demand (user clicks "Generate Insights")
 - **Token Limit:** 1,024 max tokens per response

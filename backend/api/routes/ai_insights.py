@@ -45,7 +45,7 @@ def _call_claude(system_prompt: str, user_message: str, api_key: str) -> Dict[st
     try:
         client = Anthropic(api_key=api_key)
         message = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-4-latest",
             max_tokens=1024,
             system=system_prompt,
             messages=[{"role": "user", "content": user_message}]
