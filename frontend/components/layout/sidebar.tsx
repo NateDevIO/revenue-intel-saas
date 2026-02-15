@@ -15,10 +15,13 @@ import {
   Github,
   Linkedin,
   Globe,
+  Menu,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useState, useEffect } from "react";
 
 const navigation = [
   {
@@ -60,9 +63,60 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close sidebar when route changes on mobile
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Close sidebar on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
 
   return (
-    <div className="flex h-full w-64 flex-col border-r bg-background">
+    <>
+      {/* Mobile header with hamburger */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between border-b bg-background px-4">
+        <Link href="/" className="flex items-center gap-2">
+          <TrendingUp className="h-5 w-5 text-primary" />
+          <span className="font-semibold">Revenue Intel</span>
+        </Link>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-2 hover:bg-muted rounded-md transition-colors"
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+        >
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </div>
+
+      {/* Mobile backdrop */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden fixed inset-0 z-40 bg-black/50"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Sidebar */}
+      <div
+        className={cn(
+          "fixed lg:static inset-y-0 left-0 z-50 flex h-full w-64 flex-col border-r bg-background transition-transform duration-300 ease-in-out lg:translate-x-0",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
       {/* Logo */}
       <Link href="/" className="flex h-16 items-center border-b px-6 hover:bg-muted/50 transition-colors">
         <TrendingUp className="h-6 w-6 text-primary" />
@@ -151,5 +205,6 @@ export function Sidebar() {
         </div>
       </div>
     </div>
+    </>
   );
 }

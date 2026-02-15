@@ -42,8 +42,8 @@ export default function RootLayout({
           <KeyboardShortcutsProvider>
             <div className="flex h-screen overflow-hidden">
               <Sidebar />
-              <main className="flex-1 overflow-y-auto bg-muted/30" role="main" aria-label="Main content">
-                <div className="container mx-auto p-6">{children}</div>
+              <main className="flex-1 overflow-y-auto bg-muted/30 pt-14 lg:pt-0" role="main" aria-label="Main content">
+                <div className="container mx-auto p-4 lg:p-6">{children}</div>
               </main>
             </div>
             <Toaster />
