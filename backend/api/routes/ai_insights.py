@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import os
 import json
+import time
 from typing import Optional, Dict, Any
 from anthropic import Anthropic
 from data.database import get_connection
@@ -24,6 +25,38 @@ from analysis import (
 
 router = APIRouter()
 
+# ============================================================================
+# Model Auto-Discovery
+# ============================================================================
+
+_cached_model: Optional[str] = None
+_cache_expiry: float = 0
+_CACHE_TTL = 24 * 60 * 60  # 24 hours
+
+
+def _get_latest_sonnet_model(client: Anthropic) -> str:
+    """Auto-discover the latest Sonnet model, cached for 24 hours."""
+    global _cached_model, _cache_expiry
+
+    if _cached_model and time.time() < _cache_expiry:
+        return _cached_model
+
+    try:
+        models = client.models.list()
+        sonnet_models = sorted(
+            [m for m in models.data if "sonnet" in m.id and "latest" not in m.id],
+            key=lambda m: m.created_at,
+            reverse=True,
+        )
+        if sonnet_models:
+            _cached_model = sonnet_models[0].id
+            _cache_expiry = time.time() + _CACHE_TTL
+            return _cached_model
+    except Exception as e:
+        print(f"Model discovery failed, using fallback: {e}")
+
+    return _cached_model or "claude-sonnet-4-6-latest"
+
 
 # ============================================================================
 # Shared Helpers
@@ -44,8 +77,9 @@ def _call_claude(system_prompt: str, user_message: str, api_key: str) -> Dict[st
     """Call Claude API and return insight text + model name."""
     try:
         client = Anthropic(api_key=api_key)
+        model = os.getenv("CLAUDE_MODEL") or _get_latest_sonnet_model(client)
         message = client.messages.create(
-            model="claude-sonnet-4-latest",
+            model=model,
             max_tokens=1024,
             system=system_prompt,
             messages=[{"role": "user", "content": user_message}]
